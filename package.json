@@ -1,0 +1,24 @@
+{
+  "name": "Project-Advanced-Wab-G5-Backend",
+  "version": "1.0.0",
+  "description": "Using for 523419 Advanced Wab Application - Group 5",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/B6108755/Project-Advanced-Wab-G5-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/B6108755/Project-Advanced-Wab-G5-Backend/issues"
+  },
+  "homepage": "https://github.com/B6108755/Project-Advanced-Wab-G5-Backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12"
+  }
+}
