@@ -51,62 +51,9 @@ expressApp.use((req, res, next) =>{
     })
 })
 
+//USE Middenware
 
-const getEvent = () => {
-    return new Promise((resolve, reject) => {
-        Events.find({} , (err, data) => {
-            if(err){
-                reject(new Error('Cannot get Data'))
-            }else{
-                if(data){
-                    resolve(data)
-                }else{
-                    reject(new Error('Cannot get Data'))
-                }
-            }
-        })
-    })
-}
-
-
-expressApp.get('/event/get' , (req, res) => {
-    getEvent()
-    .then(result => {
-        res.status(200).json(result)
-    })
-    .catch(err => {
-        res.status(404).json({message: 'Not Found'})
-    })
-})
-
-
-const addEvent = (eventData) => {
-    return new Promise((resolve, reject) => {
-        var new_event = new Events(
-            eventData
-        )
-        new_event.save((err, data) => {
-            if(err){
-                reject(new Error('Cannot insert Event'))
-            }else{
-                resolve({message : 'Successfully'})
-            }
-        })
-    })
-}
-
-
-expressApp.post('/event/add' , (req, res) => {
-    addEvent(req.body)
-    .then(result => {
-        res.status(200).json(result);
-    })
-    .catch(err => {
-        res.status(400).json({message : 'Cannot insert Event'})
-    })
-})
-
-
+expressApp.use('/event' , require("./middleware/event"))
 
 
 
