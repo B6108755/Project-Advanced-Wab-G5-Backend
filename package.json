@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/B6108755/Project-Advanced-Wab-G5-Backend#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.12"
   }
 }
