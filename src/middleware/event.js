@@ -1,5 +1,6 @@
 var expressFunction = require('express')
 const router = expressFunction.Router()
+const authorization = require('./../config/authorize')
 
 
 const mongoose = require('mongoose')
@@ -25,6 +26,32 @@ try {
     Events = mongoose.model('eventdata', eventSchema)
 }
 
+const getOneEvent = (id) => {
+    return new Promise((resolve, reject) => {
+        Events.findOne({_id:id} ,(err, data) =>{
+            if(err){
+                reject(new Error('Cannot find Event'))
+            }else {
+                if(data){
+                    resolve(data)
+                }else{
+                    reject(new Error('Cannot find username!'))
+                }
+            }
+        })
+    })
+}
+router.route('/getone/:id')
+    .get((req, res) => {
+        getOneEvent(req.params.id)
+        .then(result => {
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            res.status(404).json({message: 'Not Found'})
+        })
+    })
+
 
 const getEvent = () => {
     return new Promise((resolve, reject) => {
@@ -43,7 +70,7 @@ const getEvent = () => {
 }
 
 router.route('/get')
-    .get( (req, res) => {
+    .get((req, res) => {
         getEvent()
         .then(result => {
             res.status(200).json(result)
@@ -72,7 +99,7 @@ const addEvent = (eventData) => {
 
 
 router.route('/add')
-    .post((req, res) => {
+    .post(authorization ,(req, res) => {
         addEvent(req.body)
             .then(result => {
                 res.status(200).json(result);
@@ -81,6 +108,44 @@ router.route('/add')
                 res.status(400).json({message : 'Cannot insert Event'})
             })
     })
+
+
+
+const deleteEvent = (eventData) => {
+    var del_event = new Events(
+        eventData
+    );
+    return new Promise((resolve, reject) => {
+        del_event.deleteOne(eventData, (err, data) => {
+            if (err) {
+                reject(new Error('Cannot delete member!'));
+            } else {
+                if (data) {
+                    resolve(data)
+                } else {
+                    reject(new Error('Cannot delete member!'))
+                }
+            }
+        }
+        );
+    });
+}
+
+router.route('/delete/:id')
+    .delete(authorization, (req, res) => {
+        console.log("express delete member");
+        console.log(req.params.id);
+        deleteEvent({_id : req.params.id})
+            .then(result => {
+                res.status(200).json(result);
+            })
+            .catch(err =>{
+                res.status(401).json(err)
+            })
+    })
+
+
+
 
 
 module.exports = router

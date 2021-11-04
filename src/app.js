@@ -1,7 +1,7 @@
 const expressFunction = require('express')
 const expressApp = expressFunction()
-
 const mongoose = require('mongoose')
+
 const url = 'mongodb://localhost:27017/cpesut';
 const config = {
     autoIndex : true,
@@ -9,26 +9,6 @@ const config = {
     useUnifiedTopology : true
 }
 
-var Schema = require('mongoose').Schema
-
-
-const eventSchema = Schema({
-    title : String,
-    body : String,
-    file : String,
-    img : String,
-    urllink : String
-}, {
-    collection : 'eventdata'
-})
-
-let Events;
-
-try {
-    Events = mongoose.model('eventdata')
-} catch (error) {
-    Events = mongoose.model('eventdata', eventSchema)
-}
 
 expressApp.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin' , 'http://localhost:4200')
