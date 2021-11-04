@@ -5,11 +5,14 @@ const bcrypt = require('bcryptjs');
 
 var Schema = require("mongoose").Schema;
 const memberScherma = Schema({
-    id: String,
-    type: String,
-    name: String,
-    detail: String,
-    phone: String,
+    title: String,
+    firstname: String,
+    lastname: String,
+    sid: String,
+    major: String,
+    facebook: String,
+    tell: String,
+    file: String,
     img: String,
 }, {
     collection: 'members'
@@ -30,12 +33,15 @@ const makeHash = async (plainText) => {
 const insertMember = (dataMember) => {
     return new Promise((resolve, reject) => {
         var new_member = new Member({
-            id: dataMember.id,
-            type: dataMember.type,
-            name: dataMember.name,
-            detail: dataMember.detail,
-            phone: dataMember.phone,
-            img: dataMember.img
+            title: dataMember.title,
+            firstname: dataMember.firstname,
+            lastname: dataMember.lastname,
+            sid: dataMember.sid,
+            major: dataMember.major,
+            facebook: dataMember.facebook,
+            tell: dataMember.tell,
+            file: dataMember.file,
+            img: dataMember.img,
         });
         new_member.save((err, data) => {
             if (err) {
@@ -108,19 +114,55 @@ const deleteMember = (MemberID) => {
     });
 }
 
-router.route('/deletemember').post((req,res)=>{
+router.route('/deletemember').post((req, res) => {
     console.log("express delete member");
     console.log(req.body._id);
-
-    deleteMember({_id:req.body._id}).then( result => {
+    deleteMember({ _id: req.body._id }).then(result => {
         console.log(result);
         res.status(200).json(result);
     })
-    .catch( err => {
-        console.log(err);
-    })
+        .catch(err => {
+            console.log(err);
+        })
 })
 
+const updateMember = (MemberID) => {
 
+    var new_member = new Member;
+
+    console.log('updateProduct by express working!!!');
+    var query = { "_id": MemberID.body._id };
+    Member.findByIdAndUpdate(query, {
+
+        "name": MemberID.body.name,
+        "detail": MemberID.body.detail,
+        "phone": MemberID.body.phone,
+        "img": MemberID.body.img
+    }, { new: true }, function (err, doc) {
+        if (err) return res.send(500, { error: err });
+        return res.send('Succesfully saved.');
+    });
+}
+router.route('/updatemember').post((req, res) => {
+
+    var query = { "_id": req.body._id };
+
+    Member.findByIdAndUpdate(query, {
+        "title": req.body.title,
+        "firstname": req.body.firstname,
+        "lastname": req.body.lastname,
+        "sid": req.body.sid,
+        "major": req.body.major,
+        "facebook": req.body.facebook,
+        "tell": req.body.tell,
+        "file": req.body.file,
+        "img": req.body.img
+
+    }, { new: true }, function (err, doc) {
+        if (err) return res.send(500, { error: err });
+        return res.send('Succesfully saved.');
+    });
+
+})
 
 module.exports = router
